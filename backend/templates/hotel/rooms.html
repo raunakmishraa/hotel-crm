@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Rooms · {{ hotel.name }}{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">ROOMS</p>
+  <h1>Choose your room.</h1>
+  <p>Rates are shown per night. Availability shown here is the hotel's current room status.</p>
+</section>
+
+<section class="room-list">
+{% for item in room_types %}
+  <article class="room-row">
+    <div>
+      <p class="eyebrow">{{ item.type.name }}</p>
+      <h2>{{ item.type.description }}</h2>
+      <p>Up to {{ item.type.capacity }} guests · {{ item.type.amenities|join:" · " }}</p>
+    </div>
+    <div class="room-price"><strong>${{ item.type.nightly_rate }}</strong><span>per night</span></div>
+    <div class="room-action">
+      <p>{{ item.rooms|length }} available</p>
+      {% if request.user.is_authenticated %}
+        <a class="button button-dark" href="{% url 'booking_create' %}">Book this room</a>
+      {% else %}
+        <a class="button button-light" href="{% url 'login' %}?next=/book/">Sign in to book</a>
+      {% endif %}
+    </div>
+  </article>
+{% empty %}
+  <p>No rooms have been configured yet.</p>
+{% endfor %}
+</section>
+{% endblock %}

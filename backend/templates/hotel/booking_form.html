@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Book a room · {{ hotel.name }}{% endblock %}
+{% block content %}
+<section class="page-heading compact">
+  <p class="eyebrow">RESERVATION</p>
+  <h1>Book your stay.</h1>
+  <p>Your reservation is stored directly in the hotel database.</p>
+</section>
+<form class="form-panel booking-form" method="post">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+  <label>Room {{ form.room }}</label>
+  <div class="form-grid">
+    <label>Check-in {{ form.check_in }}</label>
+    <label>Check-out {{ form.check_out }}</label>
+    <label>Guests {{ form.guests }}</label>
+  </div>
+  <label>Special requests {{ form.special_requests }}</label>
+  <button class="button button-dark" type="submit">Confirm reservation</button>
+</form>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ hotel.name }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">KATHMANDU · CITY HOTEL</p>
+    <h1>A comfortable base for the city.</h1>
+    <p class="lead">{{ hotel.tagline }} {{ hotel.about }}</p>
+    <div class="actions">
+      <a class="button button-dark" href="{% url 'rooms' %}">Check rooms</a>
+      {% if not request.user.is_authenticated %}<a class="button button-light" href="{% url 'signup' %}">Create an account</a>{% endif %}
+    </div>
+  </div>
+  <div class="hero-panel">
+    <div class="hero-panel-top">STAY INFORMATION</div>
+    <dl>
+      <div><dt>Check-in</dt><dd>{{ hotel.check_in_time|time:"H:i" }}</dd></div>
+      <div><dt>Check-out</dt><dd>{{ hotel.check_out_time|time:"H:i" }}</dd></div>
+      <div><dt>Reservations</dt><dd>{{ hotel.phone }}</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-heading">
+    <div><p class="eyebrow">OUR APPROACH</p><h2>Simple hospitality, handled properly.</h2></div>
+    <p>Book directly, keep your reservations in one place, and let the hotel team manage the stay through the same operational system.</p>
+  </div>
+  <div class="principles">
+    <article><span>01</span><h3>Direct booking</h3><p>Guests can create an account and book a room without an external booking flow.</p></article>
+    <article><span>02</span><h3>Clear operations</h3><p>Front-desk staff see reservations, guests and room status from the CRM.</p></article>
+    <article><span>03</span><h3>One source of data</h3><p>Django models persist the operational records in the database and expose them through an API.</p></article>
+  </div>
+</section>
+{% endblock %}

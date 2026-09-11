@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == "signup" %}Create account{% else %}Sign in{% endif %} · {{ hotel.name }}{% endblock %}
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-intro">
+    <p class="eyebrow">{% if mode == "signup" %}GUEST ACCOUNT{% else %}WELCOME BACK{% endif %}</p>
+    <h1>{% if mode == "signup" %}Create your guest account.{% else %}Sign in to manage your stay.{% endif %}</h1>
+    <p>{{ hotel.tagline }}</p>
+  </div>
+  <form class="form-panel" method="post">
+    {% csrf_token %}
+    {% if error %}<div class="form-error">{{ error }}</div>{% endif %}
+    {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+
+    {% if mode == "signup" %}
+      <label>First name {{ form.first_name }}</label>
+      <label>Last name {{ form.last_name }}</label>
+      <label>Email {{ form.email }}</label>
+      <label>Phone {{ form.phone }}</label>
+      <label>Password {{ form.password1 }}</label>
+      <label>Confirm password {{ form.password2 }}</label>
+    {% else %}
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+    {% endif %}
+
+    <button class="button button-dark" type="submit">{% if mode == "signup" %}Create account{% else %}Sign in{% endif %}</button>
+    <p class="form-note">{% if mode == "signup" %}Already registered? <a href="{% url 'login' %}">Sign in</a>{% else %}New guest? <a href="{% url 'signup' %}">Create an account</a>{% endif %}</p>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,45 @@
+{
+  "hotel": {
+    "name": "Harbor House Hotel",
+    "tagline": "A quiet stay in the heart of Kathmandu.",
+    "about": "Harbor House is a 42-room city hotel focused on thoughtful service, comfortable rooms and straightforward hospitality for business and leisure travellers.",
+    "phone": "+977 1 555 0188",
+    "email": "stay@harborhouse.test",
+    "address": "Lazimpat, Kathmandu, Nepal",
+    "check_in_time": "14:00:00",
+    "check_out_time": "11:00:00"
+  },
+  "room_types": [
+    {
+      "name": "Deluxe King",
+      "description": "A calm, spacious room for one or two guests.",
+      "capacity": 2,
+      "nightly_rate": 145.00,
+      "amenities": ["King bed", "Work desk", "Wi-Fi", "Breakfast"]
+    },
+    {
+      "name": "Garden Twin",
+      "description": "Two single beds with a view toward the courtyard garden.",
+      "capacity": 2,
+      "nightly_rate": 125.00,
+      "amenities": ["Twin beds", "Garden view", "Wi-Fi", "Breakfast"]
+    },
+    {
+      "name": "Family Suite",
+      "description": "A larger suite with a separate sitting area.",
+      "capacity": 4,
+      "nightly_rate": 195.00,
+      "amenities": ["King bed", "Sofa bed", "Living area", "Breakfast"]
+    }
+  ],
+  "rooms": [
+    {"number": "101", "floor": 1, "room_type": "Deluxe King", "status": "available"},
+    {"number": "102", "floor": 1, "room_type": "Garden Twin", "status": "occupied"},
+    {"number": "103", "floor": 1, "room_type": "Deluxe King", "status": "cleaning"},
+    {"number": "104", "floor": 1, "room_type": "Family Suite", "status": "available"},
+    {"number": "201", "floor": 2, "room_type": "Deluxe King", "status": "available"},
+    {"number": "202", "floor": 2, "room_type": "Garden Twin", "status": "maintenance"},
+    {"number": "203", "floor": 2, "room_type": "Deluxe King", "status": "occupied"},
+    {"number": "204", "floor": 2, "room_type": "Family Suite", "status": "available"}
+  ]
+}

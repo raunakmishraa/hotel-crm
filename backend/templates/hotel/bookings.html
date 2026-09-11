@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}My bookings · {{ hotel.name }}{% endblock %}
+{% block content %}
+<section class="page-heading compact">
+  <p class="eyebrow">MY STAYS</p>
+  <h1>Your reservations.</h1>
+</section>
+<section class="table-panel">
+<table>
+<thead><tr><th>Booking</th><th>Room</th><th>Dates</th><th>Guests</th><th>Status</th><th>Total</th></tr></thead>
+<tbody>
+{% for booking in bookings %}
+<tr>
+  <td>#{{ booking.id }}</td>
+  <td>{{ booking.room.number }} · {{ booking.room.room_type.name }}</td>
+  <td>{{ booking.check_in }} → {{ booking.check_out }}</td>
+  <td>{{ booking.guests }}</td>
+  <td><span class="status status-{{ booking.status }}">{{ booking.get_status_display }}</span></td>
+  <td>${{ booking.total_amount }}</td>
+</tr>
+{% empty %}
+<tr><td colspan="6">You have no bookings yet.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</section>
+{% endblock %}

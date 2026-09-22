@@ -102,21 +102,30 @@ def my_bookings(request):
 @login_required
 def profile_view(request):
     profile, _ = GuestProfile.objects.get_or_create(user=request.user)
-    form = ProfileForm(request.POST or None, user=request.user, profile=profile)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        messages.success(request, "Your profile details have been updated.")
-        return redirect("profile")
-
     bookings = profile.bookings.select_related("room", "room__room_type").order_by("-created_at")
     return render(request, "hotel/profile.html", {
         **hotel_context(),
-        "form": form,
         "profile": profile,
         "bookings": bookings,
         "booking_count": bookings.count(),
     })
 
+
+@login_required
+def profile_edit(request):
+    profile, _ = GuestProfile.objects.get_or_create(user=request.user)
+    form = ProfileForm(request.POST or None, user=request.user, profile=profile)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Your profile details have been updated.")
+        return redirect("profile")
+
+    return render(request, "hotel/profile_edit.html", {
+        **hotel_context(),
+        "form": form,
+        "profile": profile,
+    })
 
 def staff_check(user):
     return user.is_staff

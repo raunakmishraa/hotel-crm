@@ -66,3 +66,75 @@ dt{color:var(--muted);font-size:13px}dd{margin:0;font-weight:600;font-size:13px}
 .site-footer{border-top:1px solid var(--line);padding:35px 5vw;display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.site-footer strong{color:var(--ink)}.site-footer p{margin:3px 0}
 @media(max-width:850px){.hero,.auth-layout,.crm-grid,.section-heading,.profile-grid{grid-template-columns:1fr}.hero{padding-top:60px}.hero-panel{max-width:520px}.principles,.ops-summary{grid-template-columns:1fr}.principles article{border-right:0;border-bottom:1px solid var(--line)}.room-row{grid-template-columns:1fr}.room-action{text-align:left}.crm-header{display:block}.crm-header .button{margin-top:15px}.site-footer{display:block}.site-footer>div+div{margin-top:20px}nav{gap:12px;font-size:12px}.brand{font-size:13px}.profile-grid{gap:24px}}
 @media(max-width:560px){.site-header{padding:0 4vw;height:auto;min-height:64px;padding-top:10px;padding-bottom:10px}.site-header nav{gap:10px;font-size:11px;flex-wrap:wrap;justify-content:flex-end}.site-header nav a:nth-child(1){display:none}.hero h1{font-size:50px}.actions{flex-direction:column}.button{width:100%}.form-grid{grid-template-columns:1fr}.auth-layout{padding-top:55px}.room-list{padding-bottom:55px}.page-heading,.crm-header{padding-top:55px}.site-footer{padding-left:4vw;padding-right:4vw}.profile-grid{padding:0 4vw 55px}.profile-card-body,.profile-card-form{padding:20px}}
+
+
+/* Profile overview and edit flow */
+.profile-overview-grid{grid-template-columns:1.35fr .65fr}
+.profile-security-note,.profile-edit-aside{
+  border-top:2px solid var(--ink);
+  padding:24px 4px 0;
+  align-self:start;
+}
+.profile-security-note h2,.profile-edit-aside h2{
+  font:500 clamp(28px,3vw,40px)/1.1 "Playfair Display",serif;
+  margin:0 0 14px;
+  letter-spacing:-.025em;
+}
+.profile-security-note p:not(.eyebrow),.profile-edit-aside li{
+  color:var(--muted);
+  font-size:13px;
+  max-width:480px;
+}
+.profile-edit-layout{
+  max-width:1040px;
+  margin:0 auto;
+  padding:0 5vw 90px;
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(220px,.65fr);
+  gap:48px;
+  align-items:start;
+}
+.profile-edit-layout .profile-card{min-width:0}
+.profile-password-panel{
+  border:1px solid var(--line);
+  background:var(--paper);
+  padding:18px;
+  display:grid;
+  grid-template-columns:1fr minmax(220px,.8fr);
+  gap:24px;
+  align-items:end;
+}
+.profile-password-panel h3{
+  font:500 21px/1.2 "Playfair Display",serif;
+  margin:0 0 6px;
+}
+.profile-password-panel p:not(.eyebrow){
+  color:var(--muted);
+  font-size:12px;
+  margin:0;
+}
+.profile-password-panel label{margin:0}
+.profile-form-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:2px;
+}
+.profile-form-actions .button{min-width:130px}
+.profile-edit-aside ul{
+  margin:20px 0 0;
+  padding-left:18px;
+}
+.profile-edit-aside li{margin:0 0 12px}
+@media(max-width:850px){
+  .profile-overview-grid,.profile-edit-layout{grid-template-columns:1fr}
+  .profile-edit-layout{gap:30px}
+  .profile-security-note,.profile-edit-aside{border-top:1px solid var(--line);padding-top:24px}
+  .profile-password-panel{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .profile-edit-layout{padding:0 4vw 55px}
+  .profile-password-panel{padding:16px}
+  .profile-form-actions{flex-direction:column-reverse}
+  .profile-form-actions .button{width:100%}
+}

@@ -125,6 +125,14 @@ def profile_detail(request):
 
     data = request.data
     user = request.user
+    current_password = data.get("password")
+    if not current_password or not user.check_password(str(current_password)):
+        return Response(
+            {"detail": "A valid current password is required to update your profile."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+
+    user = request.user
     if "first_name" in data:
         user.first_name = str(data["first_name"]).strip()
     if "last_name" in data:

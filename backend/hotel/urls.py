@@ -10,5 +10,6 @@ urlpatterns = [
     path("book/", views.booking_create, name="booking_create"),
     path("bookings/", views.my_bookings, name="my_bookings"),
     path("profile/", views.profile_view, name="profile"),
+    path("profile/edit/", views.profile_edit, name="profile_edit"),
     path("crm/", views.crm_dashboard, name="crm_dashboard"),
 ]

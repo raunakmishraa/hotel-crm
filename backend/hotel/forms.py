@@ -73,6 +73,12 @@ class ProfileForm(forms.Form):
     country = forms.CharField(max_length=80, required=False)
     marketing_opt_in = forms.BooleanField(required=False)
     notes = forms.CharField(widget=forms.Textarea(attrs={"rows": 4}), required=False)
+    password = forms.CharField(
+        label="Current password",
+        required=True,
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
+    )
 
     def __init__(self, *args, user=None, profile=None, **kwargs):
         self.user = user
@@ -96,6 +102,12 @@ class ProfileForm(forms.Form):
         if self.user and User.objects.filter(email__iexact=email).exclude(pk=self.user.pk).exists():
             raise forms.ValidationError("An account with this email address already exists.")
         return email
+
+    def clean_password(self):
+        password = self.cleaned_data.get("password", "")
+        if not self.user or not self.user.check_password(password):
+            raise forms.ValidationError("Enter your current password to save profile changes.")
+        return password
 
     def save(self):
         self.user.first_name = self.cleaned_data["first_name"].strip()

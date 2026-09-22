@@ -50,9 +50,41 @@ class ProfileTests(TestCase):
         self.assertContains(response, "Nepal")
         self.assertContains(response, "Quiet room preferred")
 
+    def test_profile_is_read_only_until_edit_is_selected(self):
+        self.client.login(username="guest@example.com", password="Password123!")
+        response = self.client.get(reverse("profile"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Edit profile")
+        self.assertNotContains(response, "Confirm your current password")
+
+        edit_response = self.client.get(reverse("profile_edit"))
+        self.assertEqual(edit_response.status_code, 200)
+        self.assertTemplateUsed(edit_response, "hotel/profile_edit.html")
+        self.assertContains(edit_response, "Confirm your current password")
+
+    def test_profile_update_requires_current_password(self):
+        self.client.login(username="guest@example.com", password="Password123!")
+        response = self.client.post(reverse("profile_edit"), {
+            "first_name": "Changed",
+            "last_name": "Name",
+            "email": "changed@example.com",
+            "phone": "+977 9811111111",
+            "country": "Canada",
+            "notes": "Changed notes",
+            "password": "WrongPassword!",
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Enter your current password to save profile changes.")
+
+        self.user.refresh_from_db()
+        self.profile.refresh_from_db()
+        self.assertEqual(self.user.first_name, "Arun")
+        self.assertEqual(self.user.email, "guest@example.com")
+        self.assertEqual(self.profile.country, "Nepal")
+
     def test_profile_update_successful(self):
         self.client.login(username="guest@example.com", password="Password123!")
-        response = self.client.post(reverse("profile"), {
+        response = self.client.post(reverse("profile_edit"), {
             "first_name": "Arun Kumar",
             "last_name": "Karki Updated",
             "email": "guest.updated@example.com",
@@ -60,6 +92,7 @@ class ProfileTests(TestCase):
             "country": "Switzerland",
             "notes": "High floor with ocean view",
             "marketing_opt_in": "on",
+            "password": "Password123!",
         }, follow=True)
 
         self.assertEqual(response.status_code, 200)
@@ -79,13 +112,14 @@ class ProfileTests(TestCase):
 
     def test_profile_duplicate_email_rejected(self):
         self.client.login(username="guest@example.com", password="Password123!")
-        response = self.client.post(reverse("profile"), {
+        response = self.client.post(reverse("profile_edit"), {
             "first_name": "Arun",
             "last_name": "Karki",
             "email": "other@example.com",  # Already taken
             "phone": "+977 9800000000",
             "country": "Nepal",
             "notes": "",
+            "password": "Password123!",
         })
 
         self.assertEqual(response.status_code, 200)
@@ -123,10 +157,23 @@ class ProfileTests(TestCase):
         self.assertEqual(data["email"], "guest@example.com")
         self.assertEqual(data["phone"], "+977 9800000000")
 
+        # Authenticated PATCH requires the current password.
+        response = self.client.patch(
+            "/api/v1/profile/",
+            data={"phone": "+1 555-0199"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 403)
+
         # Authenticated PATCH
         response = self.client.patch(
             "/api/v1/profile/",
-            data={"phone": "+1 555-0199", "country": "Canada", "marketing_opt_in": True},
+            data={
+                "phone": "+1 555-0199",
+                "country": "Canada",
+                "marketing_opt_in": True,
+                "password": "Password123!",
+            },
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)

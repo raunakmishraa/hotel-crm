@@ -104,3 +104,58 @@ def guest_list(request):
         "country": guest.country,
         "booking_count": guest.booking_count,
     } for guest in guests])
+
+
+@api_view(["GET", "PUT", "PATCH"])
+@permission_classes([IsAuthenticated])
+def profile_detail(request):
+    guest, _ = GuestProfile.objects.get_or_create(user=request.user)
+
+    if request.method == "GET":
+        return Response({
+            "first_name": request.user.first_name,
+            "last_name": request.user.last_name,
+            "email": request.user.email,
+            "phone": guest.phone,
+            "country": guest.country,
+            "notes": guest.notes,
+            "marketing_opt_in": guest.marketing_opt_in,
+            "booking_count": guest.bookings.count(),
+        })
+
+    data = request.data
+    user = request.user
+    if "first_name" in data:
+        user.first_name = str(data["first_name"]).strip()
+    if "last_name" in data:
+        user.last_name = str(data["last_name"]).strip()
+    if "email" in data:
+        new_email = str(data["email"]).strip().lower()
+        if not new_email:
+            return Response({"detail": "Email cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
+        if User.objects.filter(email__iexact=new_email).exclude(pk=user.pk).exists():
+            return Response({"detail": "An account with this email already exists."}, status=status.HTTP_400_BAD_REQUEST)
+        user.email = new_email
+        user.username = new_email
+    user.save()
+
+    if "phone" in data:
+        guest.phone = str(data["phone"]).strip()
+    if "country" in data:
+        guest.country = str(data["country"]).strip()
+    if "notes" in data:
+        guest.notes = str(data["notes"]).strip()
+    if "marketing_opt_in" in data:
+        guest.marketing_opt_in = bool(data["marketing_opt_in"])
+    guest.save()
+
+    return Response({
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+        "phone": guest.phone,
+        "country": guest.country,
+        "notes": guest.notes,
+        "marketing_opt_in": guest.marketing_opt_in,
+        "booking_count": guest.bookings.count(),
+    })

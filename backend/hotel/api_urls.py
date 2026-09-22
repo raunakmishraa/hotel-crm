@@ -5,5 +5,6 @@ urlpatterns = [
     path("hotel/", api_views.hotel_detail),
     path("rooms/", api_views.room_list),
     path("bookings/", api_views.booking_list_create),
+    path("profile/", api_views.profile_detail),
     path("guests/", api_views.guest_list),
 ]

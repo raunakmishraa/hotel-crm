@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import BookingForm, SignupForm
+from .forms import BookingForm, ProfileForm, SignupForm
 from .models import Booking, GuestProfile, HotelProfile, Room
 
 
@@ -96,6 +96,25 @@ def my_bookings(request):
     return render(request, "hotel/bookings.html", {
         **hotel_context(),
         "bookings": bookings,
+    })
+
+
+@login_required
+def profile_view(request):
+    profile, _ = GuestProfile.objects.get_or_create(user=request.user)
+    form = ProfileForm(request.POST or None, user=request.user, profile=profile)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Your profile details have been updated.")
+        return redirect("profile")
+
+    bookings = profile.bookings.select_related("room", "room__room_type").order_by("-created_at")
+    return render(request, "hotel/profile.html", {
+        **hotel_context(),
+        "form": form,
+        "profile": profile,
+        "bookings": bookings,
+        "booking_count": bookings.count(),
     })
 
 

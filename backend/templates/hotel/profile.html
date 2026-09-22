@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Profile details · {{ hotel.name }}{% endblock %}
+
+{% block content %}
+<section class="page-heading compact">
+  <p class="eyebrow">GUEST ACCOUNT</p>
+  <h1>Profile &amp; preferences.</h1>
+  <p>Manage your personal information, stay preferences, and communication details.</p>
+</section>
+
+<section class="profile-grid">
+  <!-- Left Column: Account Details Overview -->
+  <div class="profile-card">
+    <div class="panel-heading">
+      <h2>Account overview</h2>
+      <span>{% if request.user.is_staff %}Staff account{% else %}Guest account{% endif %}</span>
+    </div>
+    <div class="profile-card-body">
+      <div class="profile-identity">
+        <span class="brand-mark profile-brand-mark">
+          {{ request.user.first_name|first|default:request.user.email|first|upper }}
+        </span>
+        <div class="profile-identity-text">
+          <h3>{{ request.user.get_full_name|default:request.user.email }}</h3>
+          <p class="eyebrow">{% if request.user.is_staff %}STAFF ACCOUNT{% else %}HOTEL GUEST{% endif %}</p>
+        </div>
+      </div>
+
+      <dl class="profile-dl">
+        <div>
+          <dt>Email</dt>
+          <dd>{{ request.user.email }}</dd>
+        </div>
+        <div>
+          <dt>Phone</dt>
+          <dd>{{ profile.phone|default:"—" }}</dd>
+        </div>
+        <div>
+          <dt>Country</dt>
+          <dd>{{ profile.country|default:"—" }}</dd>
+        </div>
+        <div>
+          <dt>Member since</dt>
+          <dd>{{ request.user.date_joined|date:"M j, Y" }}</dd>
+        </div>
+        <div>
+          <dt>Total stays</dt>
+          <dd><strong>{{ booking_count }}</strong> reservation{{ booking_count|pluralize }}</dd>
+        </div>
+        <div>
+          <dt>Marketing</dt>
+          <dd>
+            {% if profile.marketing_opt_in %}
+              <span class="status status-available">Subscribed</span>
+            {% else %}
+              <span class="status status-checked_out">Not subscribed</span>
+            {% endif %}
+          </dd>
+        </div>
+        <div class="profile-dl-block">
+          <dt>Stay preferences &amp; notes</dt>
+          <dd>{{ profile.notes|default:"No special requests or preferences noted." }}</dd>
+        </div>
+      </dl>
+
+      <div class="profile-card-actions">
+        <a class="button button-light" href="{% url 'my_bookings' %}">View my reservations</a>
+        {% if request.user.is_staff %}
+          <a class="button button-light" href="{% url 'crm_dashboard' %}">Open CRM dashboard</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column: Edit Profile Details -->
+  <div class="profile-card">
+    <div class="panel-heading">
+      <h2>Edit details</h2>
+      <span>Update information</span>
+    </div>
+    <form class="profile-card-form" method="post" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="form-error">
+          {% for err in form.non_field_errors %}{{ err }}{% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="form-grid">
+        <label>
+          First name
+          {{ form.first_name }}
+          {% if form.first_name.errors %}
+            <span class="field-error-text">{{ form.first_name.errors.0 }}</span>
+          {% endif %}
+        </label>
+
+        <label>
+          Last name
+          {{ form.last_name }}
+          {% if form.last_name.errors %}
+            <span class="field-error-text">{{ form.last_name.errors.0 }}</span>
+          {% endif %}
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          Email address
+          {{ form.email }}
+          {% if form.email.errors %}
+            <span class="field-error-text">{{ form.email.errors.0 }}</span>
+          {% endif %}
+        </label>
+
+        <label>
+          Phone number
+          {{ form.phone }}
+          {% if form.phone.errors %}
+            <span class="field-error-text">{{ form.phone.errors.0 }}</span>
+          {% endif %}
+        </label>
+      </div>
+
+      <label>
+        Country / Region
+        {{ form.country }}
+        {% if form.country.errors %}
+          <span class="field-error-text">{{ form.country.errors.0 }}</span>
+        {% endif %}
+      </label>
+
+      <label>
+        Stay preferences &amp; special notes
+        <span class="field-hint">Dietary preferences, floor choices, accessibility requests, or room arrangement notes.</span>
+        {{ form.notes }}
+        {% if form.notes.errors %}
+          <span class="field-error-text">{{ form.notes.errors.0 }}</span>
+        {% endif %}
+      </label>
+
+      <label class="form-checkbox">
+        {{ form.marketing_opt_in }}
+        <span>Subscribe to exclusive member promotions, private events, and seasonal updates.</span>
+      </label>
+
+      <div class="form-actions">
+        <button class="button button-dark" type="submit">Save changes</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

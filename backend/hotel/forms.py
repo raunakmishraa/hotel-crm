@@ -63,3 +63,52 @@ class BookingForm(forms.ModelForm):
                 raise forms.ValidationError("That room is already booked for those dates.")
 
         return cleaned
+
+
+class ProfileForm(forms.Form):
+    first_name = forms.CharField(max_length=80, required=True)
+    last_name = forms.CharField(max_length=80, required=False)
+    email = forms.EmailField(required=True)
+    phone = forms.CharField(max_length=40, required=False)
+    country = forms.CharField(max_length=80, required=False)
+    marketing_opt_in = forms.BooleanField(required=False)
+    notes = forms.CharField(widget=forms.Textarea(attrs={"rows": 4}), required=False)
+
+    def __init__(self, *args, user=None, profile=None, **kwargs):
+        self.user = user
+        self.profile = profile
+        if user and profile and "initial" not in kwargs:
+            kwargs["initial"] = {
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email,
+                "phone": profile.phone,
+                "country": profile.country,
+                "marketing_opt_in": profile.marketing_opt_in,
+                "notes": profile.notes,
+            }
+        super().__init__(*args, **kwargs)
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email", "").strip().lower()
+        if not email:
+            raise forms.ValidationError("Email is required.")
+        if self.user and User.objects.filter(email__iexact=email).exclude(pk=self.user.pk).exists():
+            raise forms.ValidationError("An account with this email address already exists.")
+        return email
+
+    def save(self):
+        self.user.first_name = self.cleaned_data["first_name"].strip()
+        self.user.last_name = self.cleaned_data["last_name"].strip()
+        email = self.cleaned_data["email"].strip().lower()
+        self.user.email = email
+        self.user.username = email
+        self.user.save()
+
+        if self.profile:
+            self.profile.phone = self.cleaned_data.get("phone", "").strip()
+            self.profile.country = self.cleaned_data.get("country", "").strip()
+            self.profile.marketing_opt_in = self.cleaned_data.get("marketing_opt_in", False)
+            self.profile.notes = self.cleaned_data.get("notes", "").strip()
+            self.profile.save()
+        return self.user, self.profile

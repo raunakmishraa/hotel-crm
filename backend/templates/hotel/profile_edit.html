@@ -1,6 +1,151 @@
 {% extends "base.html" %}
 {% block title %}Edit profile · {{ hotel.name }}{% endblock %}
 
+{% block extra_css %}
+<style>
+  .profile-edit-layout {
+    max-width: 1040px !important;
+    margin: 0 auto !important;
+    padding: 0 5vw 90px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.55fr) minmax(220px, .65fr) !important;
+    gap: 30px !important;
+    align-items: start !important;
+    box-sizing: border-box !important;
+  }
+  .profile-edit-layout .profile-card {
+    background: var(--panel, #fffdfa) !important;
+    border: 1px solid var(--line, #ddd9d0) !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .profile-edit-layout .panel-heading {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 20px 24px !important;
+    border-bottom: 1px solid var(--line, #ddd9d0) !important;
+  }
+  .profile-edit-layout .panel-heading h2 {
+    font: 500 21px "Playfair Display", serif !important;
+    margin: 0 0 4px !important;
+    color: var(--ink, #1c2523) !important;
+  }
+  .profile-edit-layout .panel-heading span {
+    font-size: 11px !important;
+    color: var(--muted, #66716d) !important;
+  }
+  .profile-card-form {
+    padding: 26px 28px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+  }
+  .profile-card-form label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+  }
+  .profile-card-form input[type="text"],
+  .profile-card-form input[type="email"],
+  .profile-card-form input[type="password"],
+  .profile-card-form select,
+  .profile-card-form textarea {
+    font: 400 14px "DM Sans", sans-serif !important;
+    padding: 12px !important;
+    border: 1px solid #cfcac0 !important;
+    background: #fff !important;
+    width: 100% !important;
+    color: var(--ink, #1c2523) !important;
+    box-sizing: border-box !important;
+  }
+  .profile-card-form input:focus,
+  .profile-card-form select:focus,
+  .profile-card-form textarea:focus {
+    outline: none !important;
+    border-color: var(--ink, #1c2523) !important;
+  }
+  .profile-card-form textarea {
+    resize: vertical !important;
+    min-height: 84px !important;
+  }
+  .profile-password-panel {
+    border: 1px solid var(--line, #ddd9d0) !important;
+    background: var(--paper, #f6f4ef) !important;
+    padding: 18px !important;
+    display: grid !important;
+    grid-template-columns: 1fr minmax(220px, .8fr) !important;
+    gap: 24px !important;
+    align-items: end !important;
+  }
+  .profile-password-panel h3 {
+    font: 500 21px/1.2 "Playfair Display", serif !important;
+    margin: 0 0 6px !important;
+    color: var(--ink, #1c2523) !important;
+  }
+  .profile-password-panel p {
+    color: var(--muted, #66716d) !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+  }
+  .profile-edit-aside h2 {
+    font: 500 clamp(24px, 2.5vw, 36px)/1.15 "Playfair Display", serif !important;
+    margin: 0 0 14px !important;
+    color: var(--ink, #1c2523) !important;
+  }
+  .profile-edit-aside ul {
+    margin: 20px 0 0 !important;
+    padding-left: 18px !important;
+  }
+  .profile-edit-aside li {
+    color: var(--muted, #66716d) !important;
+    font-size: 13px !important;
+    margin: 0 0 12px !important;
+  }
+  .profile-form-actions {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    margin-top: 2px !important;
+  }
+  .profile-form-actions .button {
+    min-width: 130px !important;
+  }
+  @media(max-width:850px) {
+    .profile-edit-layout {
+      grid-template-columns: 1fr !important;
+      gap: 30px !important;
+    }
+    .profile-edit-aside {
+      border-top: 1px solid var(--line, #ddd9d0) !important;
+      padding-top: 24px !important;
+    }
+    .profile-password-panel {
+      grid-template-columns: 1fr !important;
+    }
+  }
+  @media(max-width:560px) {
+    .profile-edit-layout {
+      padding: 0 4vw 55px !important;
+    }
+    .profile-card-form {
+      padding: 20px !important;
+    }
+    .profile-password-panel {
+      padding: 16px !important;
+    }
+    .profile-form-actions {
+      flex-direction: column-reverse !important;
+    }
+    .profile-form-actions .button {
+      width: 100% !important;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="page-heading compact">
   <p class="eyebrow">ACCOUNT SETTINGS</p>

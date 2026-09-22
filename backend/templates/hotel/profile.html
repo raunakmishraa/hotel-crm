@@ -1,5 +1,249 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Profile · {{ hotel.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Profile Grid Layout & Overrides */
+  .profile-grid {
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+    padding: 0 5vw 90px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.9fr) !important;
+    gap: 32px !important;
+    align-items: start !important;
+    box-sizing: border-box !important;
+  }
+
+  .profile-grid .profile-card {
+    background: var(--panel, #fffdfa) !important;
+    border: 1px solid var(--line, #ddd9d0) !important;
+    box-sizing: border-box !important;
+  }
+
+  .profile-grid .panel-heading {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 20px 24px !important;
+    border-bottom: 1px solid var(--line, #ddd9d0) !important;
+    box-sizing: border-box !important;
+  }
+
+  .profile-grid .panel-heading h2 {
+    font: 500 21px "Playfair Display", serif !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+    color: var(--ink, #1c2523) !important;
+  }
+
+  .profile-grid .panel-heading span {
+    font-size: 11px !important;
+    color: var(--muted, #66716d) !important;
+    letter-spacing: .05em !important;
+  }
+
+  .profile-grid .profile-card-body {
+    padding: 24px 28px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 22px !important;
+    box-sizing: border-box !important;
+  }
+
+  .profile-grid .profile-identity {
+    display: flex !important;
+    gap: 16px !important;
+    align-items: center !important;
+    padding-bottom: 18px !important;
+    border-bottom: 1px solid var(--line, #ddd9d0) !important;
+  }
+
+  .profile-grid .profile-brand-mark {
+    width: 44px !important;
+    height: 44px !important;
+    border: 1px solid var(--ink, #1c2523) !important;
+    background: var(--soft, #ece8df) !important;
+    color: var(--ink, #1c2523) !important;
+    display: grid !important;
+    place-items: center !important;
+    font: 600 14px "DM Sans", sans-serif !important;
+    letter-spacing: .06em !important;
+    flex-shrink: 0 !important;
+  }
+
+  .profile-grid .profile-identity-text {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    min-width: 0 !important;
+  }
+
+  .profile-grid .profile-identity-text h3 {
+    margin: 0 !important;
+    font: 500 20px/1.2 "Playfair Display", serif !important;
+    word-break: break-word !important;
+    color: var(--ink, #1c2523) !important;
+  }
+
+  .profile-grid .profile-identity-text .eyebrow {
+    font-size: 10px !important;
+    letter-spacing: .12em !important;
+    font-weight: 600 !important;
+    color: var(--muted, #66716d) !important;
+    margin: 0 !important;
+  }
+
+  .profile-grid .profile-dl {
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+  }
+
+  .profile-grid .profile-dl > div {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: baseline !important;
+    padding: 13px 0 !important;
+    border-bottom: 1px solid var(--line, #ddd9d0) !important;
+    gap: 16px !important;
+  }
+
+  .profile-grid .profile-dl > div:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .profile-grid .profile-dl dt {
+    color: var(--muted, #66716d) !important;
+    font-size: 13px !important;
+    flex-shrink: 0 !important;
+    font-weight: 400 !important;
+    margin: 0 !important;
+  }
+
+  .profile-grid .profile-dl dd {
+    margin: 0 !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    text-align: right !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    color: var(--ink, #1c2523) !important;
+  }
+
+  .profile-grid .profile-dl .profile-dl-block {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    padding-top: 14px !important;
+  }
+
+  .profile-grid .profile-dl .profile-dl-block dt {
+    text-align: left !important;
+  }
+
+  .profile-grid .profile-dl .profile-dl-block dd {
+    text-align: left !important;
+    font-weight: 400 !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    background: var(--paper, #f6f4ef) !important;
+    border: 1px solid var(--line, #ddd9d0) !important;
+    padding: 12px 14px !important;
+    margin-top: 4px !important;
+  }
+
+  .profile-grid .profile-card-actions {
+    display: flex !important;
+    gap: 12px !important;
+    margin-top: 6px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .profile-grid .profile-card-actions .button {
+    min-height: 44px !important;
+    padding: 0 18px !important;
+    border: 1px solid var(--ink, #1c2523) !important;
+    font: 600 13px "DM Sans", sans-serif !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+  }
+
+  .profile-grid .profile-card-actions .button-dark {
+    background: var(--ink, #1c2523) !important;
+    color: #fff !important;
+  }
+
+  .profile-grid .profile-card-actions .button-light {
+    background: transparent !important;
+    color: var(--ink, #1c2523) !important;
+  }
+
+  .profile-grid .profile-security-note {
+    border-top: 2px solid var(--ink, #1c2523) !important;
+    padding: 24px 6px 0 !important;
+    align-self: start !important;
+    box-sizing: border-box !important;
+  }
+
+  .profile-grid .profile-security-note .eyebrow {
+    font-size: 11px !important;
+    letter-spacing: .14em !important;
+    font-weight: 600 !important;
+    color: var(--muted, #66716d) !important;
+    margin: 0 0 12px !important;
+  }
+
+  .profile-grid .profile-security-note h2 {
+    font: 500 clamp(24px, 2.5vw, 36px)/1.15 "Playfair Display", serif !important;
+    margin: 0 0 14px !important;
+    letter-spacing: -.025em !important;
+    color: var(--ink, #1c2523) !important;
+  }
+
+  .profile-grid .profile-security-note p {
+    color: var(--muted, #66716d) !important;
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+  }
+
+  @media (max-width: 850px) {
+    .profile-grid {
+      grid-template-columns: 1fr !important;
+      gap: 32px !important;
+    }
+    .profile-grid .profile-security-note {
+      border-top: 1px solid var(--line, #ddd9d0) !important;
+      padding-top: 24px !important;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .profile-grid {
+      padding: 0 4vw 55px !important;
+      gap: 24px !important;
+    }
+    .profile-grid .profile-card-body {
+      padding: 20px !important;
+    }
+    .profile-grid .panel-heading {
+      padding: 16px 20px !important;
+    }
+    .profile-grid .profile-card-actions {
+      flex-direction: column !important;
+    }
+    .profile-grid .profile-card-actions .button {
+      width: 100% !important;
+    }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
 <section class="page-heading compact">
@@ -8,7 +252,7 @@
   <p>Review your personal information, stay preferences, and communication details.</p>
 </section>
 
-<section class="profile-grid profile-overview-grid">
+<section class="profile-grid">
   <div class="profile-card">
     <div class="panel-heading">
       <h2>Account overview</h2>
@@ -27,18 +271,33 @@
       </div>
 
       <dl class="profile-dl">
-        <div><dt>Email</dt><dd>{{ request.user.email }}</dd></div>
-        <div><dt>Phone</dt><dd>{{ profile.phone|default:"—" }}</dd></div>
-        <div><dt>Country</dt><dd>{{ profile.country|default:"—" }}</dd></div>
-        <div><dt>Member since</dt><dd>{{ request.user.date_joined|date:"M j, Y" }}</dd></div>
-        <div><dt>Total stays</dt><dd><strong>{{ booking_count }}</strong> reservation{{ booking_count|pluralize }}</dd></div>
+        <div>
+          <dt>Email</dt>
+          <dd>{{ request.user.email }}</dd>
+        </div>
+        <div>
+          <dt>Phone</dt>
+          <dd>{{ profile.phone|default:"—" }}</dd>
+        </div>
+        <div>
+          <dt>Country</dt>
+          <dd>{{ profile.country|default:"—" }}</dd>
+        </div>
+        <div>
+          <dt>Member since</dt>
+          <dd>{{ request.user.date_joined|date:"M j, Y" }}</dd>
+        </div>
+        <div>
+          <dt>Total stays</dt>
+          <dd><strong>{{ booking_count }}</strong> reservation{{ booking_count|pluralize }}</dd>
+        </div>
         <div>
           <dt>Marketing</dt>
           <dd>
             {% if profile.marketing_opt_in %}
-              <span class="status status-available">Subscribed</span>
+            <span class="status status-available">Subscribed</span>
             {% else %}
-              <span class="status status-checked_out">Not subscribed</span>
+            <span class="status status-checked_out">Not subscribed</span>
             {% endif %}
           </dd>
         </div>
@@ -52,7 +311,7 @@
         <a class="button button-dark" href="{% url 'profile_edit' %}">Edit profile</a>
         <a class="button button-light" href="{% url 'my_bookings' %}">View my reservations</a>
         {% if request.user.is_staff %}
-          <a class="button button-light" href="{% url 'crm_dashboard' %}">Open CRM dashboard</a>
+        <a class="button button-light" href="{% url 'crm_dashboard' %}">Open CRM dashboard</a>
         {% endif %}
       </div>
     </div>
@@ -61,7 +320,8 @@
   <aside class="profile-security-note">
     <p class="eyebrow">ACCOUNT SECURITY</p>
     <h2>Changes are verified before they are saved.</h2>
-    <p>Your profile is read-only on this page. Select <strong>Edit profile</strong> to make changes. Your current password is required before any update can be saved.</p>
+    <p>Your profile is read-only on this page. Select <strong>Edit profile</strong> to make changes. Your current
+      password is required before any update can be saved.</p>
   </aside>
 </section>
 {% endblock %}

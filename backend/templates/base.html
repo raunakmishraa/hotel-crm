@@ -5,7 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ hotel.name|default:"Hotel" }}{% endblock %}</title>
-  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=1.2">
+  {% block extra_css %}{% endblock %}
 </head>
 <body>
 <header class="site-header">

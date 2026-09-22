@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Edit profile · {{ hotel.name }}{% endblock %}
+
+{% block content %}
+<section class="page-heading compact">
+  <p class="eyebrow">ACCOUNT SETTINGS</p>
+  <h1>Edit your profile.</h1>
+  <p>Update your personal information and stay preferences. Your current password is required to save changes.</p>
+</section>
+
+<section class="profile-edit-layout">
+  <div class="profile-card">
+    <div class="panel-heading">
+      <div>
+        <h2>Personal details</h2>
+        <span>Changes apply to your guest account</span>
+      </div>
+    </div>
+
+    <form class="profile-card-form profile-edit-form" method="post" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="form-error">
+          {% for err in form.non_field_errors %}{{ err }}{% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="form-grid">
+        <label>
+          First name
+          {{ form.first_name }}
+          {% if form.first_name.errors %}<span class="field-error-text">{{ form.first_name.errors.0 }}</span>{% endif %}
+        </label>
+
+        <label>
+          Last name
+          {{ form.last_name }}
+          {% if form.last_name.errors %}<span class="field-error-text">{{ form.last_name.errors.0 }}</span>{% endif %}
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          Email address
+          {{ form.email }}
+          {% if form.email.errors %}<span class="field-error-text">{{ form.email.errors.0 }}</span>{% endif %}
+        </label>
+
+        <label>
+          Phone number
+          {{ form.phone }}
+          {% if form.phone.errors %}<span class="field-error-text">{{ form.phone.errors.0 }}</span>{% endif %}
+        </label>
+      </div>
+
+      <label>
+        Country / Region
+        {{ form.country }}
+        {% if form.country.errors %}<span class="field-error-text">{{ form.country.errors.0 }}</span>{% endif %}
+      </label>
+
+      <label>
+        Stay preferences &amp; special notes
+        <span class="field-hint">Dietary preferences, floor choices, accessibility requests, or room arrangement notes.</span>
+        {{ form.notes }}
+        {% if form.notes.errors %}<span class="field-error-text">{{ form.notes.errors.0 }}</span>{% endif %}
+      </label>
+
+      <label class="form-checkbox">
+        {{ form.marketing_opt_in }}
+        <span>Subscribe to exclusive member promotions, private events, and seasonal updates.</span>
+      </label>
+
+      <div class="profile-password-panel">
+        <div>
+          <p class="eyebrow">SECURITY CHECK</p>
+          <h3>Confirm your current password</h3>
+          <p>For your security, we verify your existing password before applying profile changes.</p>
+        </div>
+        <label>
+          {{ form.password.label }}
+          {{ form.password }}
+          {% if form.password.errors %}<span class="field-error-text">{{ form.password.errors.0 }}</span>{% endif %}
+        </label>
+      </div>
+
+      <div class="form-actions profile-form-actions">
+        <a class="button button-light" href="{% url 'profile' %}">Cancel</a>
+        <button class="button button-dark" type="submit">Save changes</button>
+      </div>
+    </form>
+  </div>
+
+  <aside class="profile-edit-aside">
+    <p class="eyebrow">BEFORE YOU SAVE</p>
+    <h2>Keep your account details current.</h2>
+    <ul>
+      <li>Use an email address you can access.</li>
+      <li>Keep your phone number up to date for booking communication.</li>
+      <li>Your password is checked but never stored with the profile data.</li>
+    </ul>
+  </aside>
+</section>
+{% endblock %}
